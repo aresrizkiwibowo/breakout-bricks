@@ -13,7 +13,8 @@
 Class = require 'lib.class'
 push = require 'lib.push'
 
-require 'class.Ball'
+require 'class.Ball' 
+require 'class.BallSpawner' 
 require 'class.Brick'
 
 -- Constants
@@ -50,33 +51,46 @@ function love.load()
 
     push.setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, {upscale = 'normal'})
 
+    spawner = BallSpawner()
     balls = {}
     bricks = makeLevel()
 end
 
-function love.keypressed(key)
-    if key == 'space' then
-        table.insert(balls, Ball())
-    end
-end
 
 function love.update(dt)
-    for i, ball in ipairs(balls) do
-        ball:update(dt)
-    end
+    spawner:update(dt)
 
+    for i, ball in ipairs(balls) do
+        if ball then
+            ball:update(dt)
+        else
+            ball = nil
+        end
+    end
+    
     for i, bricks in ipairs(bricks) do
         bricks:update(dt)
     end
-
+    
     if #bricks == 0 then
         bricks = makeLevel()
     end
 end
 
 
+function love.keypressed(key)
+    if key == 'escape' then
+        love.event.quit()
+    elseif key == 'space' then
+        table.insert(balls, Ball())
+    end
+end
+
+
 function love.draw()
     push.start()
+
+    spawner:render()
     
     for i, ball in ipairs(balls) do
         ball:render()
