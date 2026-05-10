@@ -61,15 +61,14 @@ function love.update(dt)
     spawner:update(dt)
 
     for i, ball in ipairs(balls) do
-        if ball then
-            ball:update(dt)
-        else
-            ball = nil
+        for j, brick in ipairs(bricks) do
+            if ball:collides(brick) then
+                table.remove(bricks, j)
+                break
+            end
         end
-    end
-    
-    for i, bricks in ipairs(bricks) do
-        bricks:update(dt)
+
+        ball:update(dt)
     end
     
     if #bricks == 0 then
@@ -98,6 +97,10 @@ function love.draw()
     
     for i, brick in ipairs(bricks) do
         brick:render()
+    end
+
+    if love.keyboard.isDown('v') then
+        love.graphics.print('Bricks: ' .. tostring(#bricks), 10, 85/100 * VIRTUAL_HEIGHT)
     end
 
     push.finish()
