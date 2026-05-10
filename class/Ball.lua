@@ -6,7 +6,7 @@ BALL_ACCELERATION = 1.02
 function Ball:init()
     self.x = spawner.x
     self.y = spawner.y
-    self.dx = math.random(-30, 30)
+    self.dx = math.random(30) * spawner.sharpness
     self.dy = -math.random(50, 100)
 end
 
@@ -21,9 +21,6 @@ function Ball:update(dt)
     elseif self.y - BALL_RADIUS < 0 then -- top wall
         self.y = 0 + BALL_RADIUS
         self.dy = -self.dy
-    elseif self.y - BALL_RADIUS > VIRTUAL_HEIGHT then -- remove ball if disappeared to the bottom (no wall)
-        self = nil
-        return
     end
 
     self.x = self.x + self.dx * dt * BALL_ACCELERATION

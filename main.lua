@@ -60,15 +60,21 @@ end
 function love.update(dt)
     spawner:update(dt)
 
-    for i, ball in ipairs(balls) do
-        for j, brick in ipairs(bricks) do
-            if ball:collides(brick) then
+    -- erase balls when under the screen, erase brick when collided
+    -- iterated backwards to avoid skipping when a key is deleted
+    for i = #balls, 1, -1 do
+        balls[i]:update(dt)
+        if balls[i].y - BALL_RADIUS > VIRTUAL_HEIGHT then
+            table.remove(balls, i)
+            break
+        end
+
+        for j = #bricks, 1, -1 do
+            if balls[i]:collides(bricks[j]) then
                 table.remove(bricks, j)
                 break
             end
         end
-
-        ball:update(dt)
     end
     
     if #bricks == 0 then
@@ -100,7 +106,7 @@ function love.draw()
     end
 
     if love.keyboard.isDown('v') then
-        love.graphics.print('Bricks: ' .. tostring(#bricks), 10, 85/100 * VIRTUAL_HEIGHT)
+        love.graphics.print('dx: ' .. tostring(spawner.dx), 10, 85/100 * VIRTUAL_HEIGHT)
     end
 
     push.finish()
