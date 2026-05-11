@@ -85,7 +85,9 @@ function love.update(dt)
                 local py = BRICK_HEIGHT/2 - math.abs(oy)
 
                 if px < py then
+                    -- change to opposite direction
                     balls[i].dx = -balls[i].dx + px * BALL_ACCELERATION * dt
+                    -- shift by py to put ball right outside the brick
                     balls[i].x = balls[i].x + (ox < 0 and px or -px)
                 else
                     balls[i].dy = -balls[i].dy + py * BALL_ACCELERATION * dt
