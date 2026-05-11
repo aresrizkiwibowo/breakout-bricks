@@ -1,12 +1,10 @@
 Ball = Class{}
 
--- accelerates each ball over time
-BALL_ACCELERATION = 1.02
 
 function Ball:init()
     self.x = spawner.x
     self.y = spawner.y
-    self.dx = math.random(30) * spawner.dx
+    self.dx = math.random(20, 60) * spawner.dx
     self.dy = -math.random(50, 100)
 end
 

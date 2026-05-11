@@ -24,20 +24,21 @@ WINDOW_HEIGHT = 540
 VIRTUAL_WIDTH = 320
 VIRTUAL_HEIGHT = 180
 
-BALL_RADIUS = 4
-
 BRICK_WIDTH = 20
 BRICK_HEIGHT = 10
 
 BRICKS_PADDING_X = 10 -- left and right of each row (not individual brick)
-BRICKS_PADDING_Y = 2 -- top and bottom of each row
+BRICKS_PADDING_Y = 2 -- top and bottom of each row (individual brick)
 
-BRICK_MIN_ROWS = 1
-BRICKS_MAX_ROWS = 5
-
-BRICK_MIN_COLUMNS = 4
+-- minimum and maximum rows for the random bricks generator
+BRICK_MIN_ROWS = 3
+BRICKS_MAX_ROWS = 10
+-- same as above, but for columns
+BRICK_MIN_COLUMNS = 8
 BRICKS_MAX_COLUMNS = (VIRTUAL_WIDTH - BRICKS_PADDING_X * 2) / BRICK_WIDTH 
 
+BALL_RADIUS = 4
+BALL_ACCELERATION = 1.02 -- accelerates ball over time
 
 function love.load()
     love.graphics.setDefaultFilter('nearest', 'nearest')
@@ -74,6 +75,22 @@ function love.update(dt)
 
         for j = #bricks, 1, -1 do
             if balls[i]:collides(bricks[j]) then
+                -- if brick is hit, bounce current ball
+                -- calculate offset (center to center distance)
+                local ox = balls[i].x - (bricks[j].x + BRICK_WIDTH/2)
+                local oy = balls[i].y - (bricks[j].y + BRICK_HEIGHT/2)
+
+                -- calculate penetration depth of ball relative to brick
+                local px = BRICK_WIDTH/2 - math.abs(ox)
+                local py = BRICK_HEIGHT/2 - math.abs(oy)
+
+                if px < py then
+                    balls[i].dx = -balls[i].dx + px * BALL_ACCELERATION * dt
+                else
+                    balls[i].dy = -balls[i].dy + py * BALL_ACCELERATION * dt
+                end
+
+                -- remove this brick and break the loop to stop looking for another brick
                 table.remove(bricks, j)
                 break
             end
