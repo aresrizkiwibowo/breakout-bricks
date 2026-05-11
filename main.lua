@@ -32,7 +32,10 @@ BRICK_HEIGHT = 10
 BRICKS_PADDING_X = 10 -- left and right of each row (not individual brick)
 BRICKS_PADDING_Y = 2 -- top and bottom of each row
 
+BRICK_MIN_ROWS = 1
 BRICKS_MAX_ROWS = 5
+
+BRICK_MIN_COLUMNS = 4
 BRICKS_MAX_COLUMNS = (VIRTUAL_WIDTH - BRICKS_PADDING_X * 2) / BRICK_WIDTH 
 
 
@@ -115,8 +118,8 @@ end
 
 function makeLevel()
     -- brick row and columns
-    local row = math.random(BRICKS_MAX_ROWS)
-    local column = math.random(BRICKS_MAX_COLUMNS)
+    local row = math.random(BRICK_MIN_ROWS, BRICKS_MAX_ROWS)
+    local column = math.random(BRICK_MIN_COLUMNS ,BRICKS_MAX_COLUMNS)
 
     -- the length for the brick to start to achieve centered layout
     -- ( half of empty area + padding )
