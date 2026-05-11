@@ -4,7 +4,7 @@ Ball = Class{}
 function Ball:init()
     self.x = spawner.x
     self.y = spawner.y
-    self.dx = math.random(20, 60) * spawner.dx
+    self.dx = math.random(60) * spawner.dx
     self.dy = -math.random(50, 100)
 end
 
