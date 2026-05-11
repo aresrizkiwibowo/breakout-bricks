@@ -86,8 +86,10 @@ function love.update(dt)
 
                 if px < py then
                     balls[i].dx = -balls[i].dx + px * BALL_ACCELERATION * dt
+                    balls[i].x = balls[i].x + (ox < 0 and px or -px)
                 else
                     balls[i].dy = -balls[i].dy + py * BALL_ACCELERATION * dt
+                    balls[i].y = balls[i].y + (oy < 0 and py or -py)
                 end
 
                 -- remove this brick and break the loop to stop looking for another brick
