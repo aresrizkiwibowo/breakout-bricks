@@ -129,10 +129,6 @@ function love.draw()
         brick:render()
     end
 
-    if love.keyboard.isDown('v') then
-        love.graphics.print('dx: ' .. tostring(spawner.dx), 10, 85/100 * VIRTUAL_HEIGHT)
-    end
-
     push.finish()
 end
 
